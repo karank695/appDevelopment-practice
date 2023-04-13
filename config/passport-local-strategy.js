@@ -4,44 +4,46 @@ const Customer=require('../models/customer')
 passport.use(new LocalStrategy(
     {usernameField:'email'},
     function (email, password, done) {
-        Customer.findOne({ customer_email: email })
-            .then((customer) => {
-                if (!customer || password != customer.customer_password) {
+        Customer.findOne({ email:email })
+            .then((user) => {
+                if (!user || user.password!=password) {
                     return done(null, false);
                 }
-                return done(null, customer);
+                return done(null, user);
+                
             })
             .catch((err) => {
                 console.log("finding error in fetching data");
-                done(err);
+                return done(err);
             });
 }
 ));
 //serializing the customer to set cookie
-passport.serializeUser(function (customer, done) {
-    done(null, customer.id);
+passport.serializeUser(function (user, done) {
+    done(null, user.id);
 })
 
 passport.deserializeUser(function (id, done) {
-    Customer.findById(id).then((customer) => {
-        return done(null, customer);
+    Customer.findById(id).then((user) => {
+        return done(null, user);
     }).catch((err) => {
         return done(err);
     });
 })
 
-passport.checkAuthentication = (req, res,next) => {
+passport.checkAuthentication = function(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     }
     return res.redirect('/sign-in');
 }
 
-passport.setAuthenticatedCustomer = (req, res, next) => {
+passport.setAuthenticatedUser = (req, res, next) => {
     if (req.isAuthenticated()) {
-        res.locals.customer = req.customer;
+        res.locals.user = req.user;
     }
     next();
 }
 module.exports = passport;
+
 

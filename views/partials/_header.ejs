@@ -1,26 +1,38 @@
-    
- <!DOCTYPE html>
- <html lang="en">
- <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="/css/header.css">
- </head>
- <body>
-       <div class="header">
-           <div id="header-img">
-               <img src="/images/background.jpg">
-           </div>
-           <div id="nav">
-               <ul>
-                   <li><a href="/">Home</a></li>
-                   <li><a href="/sign-up">Sign-Up</a></li>
-                   <li><a href="/sign-in">Sign-in</a></li>
+    <!DOCTYPE html>
+    <html lang="en">
 
-               </ul>
-           </div>
-       </div>
- </body>
- </html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="/css/header.css">
+    </head>
+
+    <body>
+        <div class="header">
+            <div id="header-img">
+                <img src="/images/background.jpg">
+            </div>
+            <% if(locals.user){ %>
+            <div class="nav">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><%= user.name %></li>
+                </ul>
+            </div>
+                <% }else{ %>
+                    <div class="nav">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/sign-up">Sign-Up</a></li>
+                    <li><a href="/sign-in">Sign-in</a></li>
+                </ul>
+                </div>
+                <% } %>
+
+           
+        </div>
+    </body>
+
+    </html>

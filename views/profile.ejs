@@ -9,14 +9,29 @@
 </head>
 <body>
     <%- include('partials/_header') %>
+    <form method="post" action="/createPost">
+       <label>Write Post:</label>
+       <textarea cols="20" rows="3" name="post" required></textarea>
+      <button type="submit">Post</button>
+    </form>
+    <div class="post-comment">
+     <div class="posts">
+        <ul>
+        <% for(let post of posts){ %>
+            <li><%= post.content %></li>
+            <li><%= post.user_id.email %></li>
+            <% } %>
+        </ul>
+     </div>
+    </div>
     <div class="container">
         <div class="img-detail">
         <div id="img">
             <img src="/images/background.jpg">
         </div>
         <div id="detail">
-            <span>Karan Kumar</span>
-            <span>krn0869@gmail.com</span>
+            <span><%= user.name %></span>
+            <span><%= user.email %></span>
             <span><a href="/sign-out"><button id="btn">Sign-Out</button></a></span>
         </div>
         </div>
