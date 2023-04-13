@@ -5,19 +5,28 @@ module.exports.home = (req, res) => {
 }
 //controller for signup page
 module.exports.signUp = (req, res) => {
-    // if (req.cookies.user_id) {
-    //     return res.redirect('/profile');
-    // }
+    if (req.cookies.user_id) {
+        return res.redirect('/profile');
+    }
     return res.render('sign-up');
 }
 module.exports.signin = (req, res) => {
-    // if (req.cookies.user_id) {
-    //     return res.redirect('/profile');
-    // }
+    if (req.cookies.user_id) {
+        return res.redirect('/profile');
+    }
     return res.render('sign-in');
 }
 module.exports.profile = (req, res) => {
-    return res.redirect('/');
+    if (req.cookies.user_id) {
+        Customer.findOne({ _id: req.cookies.user_id })
+            .then((data) => {
+                console.log(data);
+                return res.render('profile', { user: data });
+            })
+            .catch((err) => {
+                console.log(err);
+        })
+    }
 }
 module.exports.createCustomer = (req, res) => {
     if (req.body.password != req.body.confirmPassword) {
@@ -30,7 +39,6 @@ module.exports.createCustomer = (req, res) => {
             if (user) {
                 return res.redirect('/sign-in');
             } else {
-                console.log(req.body);
                 Customer.create({
                     customer_name: req.body.customerName,
                     customer_email: req.body.email,
@@ -69,4 +77,8 @@ module.exports.createSession = (req, res) => {
         .catch((err) => {
             console.log(err);
         })
+}
+module.exports.signout = (req, res) => {
+    res.clearCookie('user_id');
+   return res.redirect('/sign-in');
 }
