@@ -1,14 +1,25 @@
+const passport = require('passport');
 const Customer = require('../models/customer');
 //controller for homepage
 module.exports.home = (req, res) => {
-    res.render('home');
+    return res.render('home');
 }
 //controller for signup page
-module.exports.signUp=(req, res) => {
-    res.render('sign-up');
+module.exports.signUp = (req, res) => {
+    if (req.isAuthenticated()) {
+         return res.redirect('/profile')
+    }
+    return res.render('sign-up');
+   
 }
 module.exports.signin = (req, res) => {
-    res.render('sign-in');
+    if (req.isAuthenticated()) {
+        return res.redirect('/profile');
+    }
+    return res.render('sign-in');
+}
+module.exports.profile = (req, res) => {
+    return res.render('profile');
 }
 module.exports.createCustomer = (req, res) => {
     if (req.body.password != req.body.confirmPassword) {
@@ -40,5 +51,14 @@ module.exports.createCustomer = (req, res) => {
 
 }
 module.exports.createSession = (req, res) => {
-    res.render('sign-in');
+    return res.redirect('/profile');
+}
+module.exports.signout = (req, res) => {
+    req.logOut((err) => {
+        if (err) {
+            console.log(err);
+        }
+         return res.redirect('/sign-up');
+    });
+   
 }
